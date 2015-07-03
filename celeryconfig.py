@@ -4,8 +4,8 @@ from kombu import Exchange, Queue
 
 CELERY_QUEUES = (
     Queue('default', Exchange('default'), routing_key='default'),
-    Queue('videos',  Exchange('media'),   routing_key='media.video'),
-    Queue('images',  Exchange('media'),   routing_key='media.image'),
+    Queue('notifications',  Exchange('media'),   routing_key='publish.notification'),
+    # Queue('images',  Exchange('media'),   routing_key='media.image'),
 )
 CELERY_DEFAULT_QUEUE = 'default'
 CELERY_DEFAULT_EXCHANGE_TYPE = 'direct'
