@@ -11,14 +11,6 @@ CELERY_DEFAULT_QUEUE = 'default'
 CELERY_DEFAULT_EXCHANGE_TYPE = 'direct'
 CELERY_DEFAULT_ROUTING_KEY = 'default'
 
-# # default RabbitMQ broker
-# BROKER_URL = 'amqp://'
-#
-# # default RabbitMQ backend
-# CELERY_RESULT_BACKEND = 'amqp://'
-
-
-
 BROKER_URL = 'amqp://'
 CELERY_RESULT_BACKEND = 'amqp://'
 C_FORCE_ROOT='true'
