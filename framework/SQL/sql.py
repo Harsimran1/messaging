@@ -8,29 +8,27 @@ import os
 import sys
 import psycopg2
 from framework.celery.celery_start import celery
+from base import Notification
 # import argparse
 
 
 
 @celery.task
-def update_data(notification=None,tags=None):
+def update_data( notification):
     con = None
     try:
-
         con = psycopg2.connect("host='localhost' dbname='gro' user='gro' password='gro123'")
         cur = con.cursor()
-        cur.execute('SELECT version()')
-        ver = cur.fetchone()
-        print ver
-        con.commit()
-        cur.execute("INSERT INTO notifications.notification(description,tags,created_at,updated_at) VALUES(%s,%s,now(),now()) returning id",(notification,tags))
+        description=notification.getDescription()
+        topics= notification.getTopics()
+        cur.execute("INSERT INTO notifications.notification(description,tags,created_at,updated_at) VALUES(%s,%s,now(),now()) returning id",(description,topics))
         con.commit()
         ver3=cur.fetchone()
         print ver3
 
 
 
-        cur.execute("SELECT id from users.users WHERE subscriptions&&%s",(tags,))
+        cur.execute("SELECT id from users.users WHERE subscriptions && %s::VARCHAR []",(topics,))
         ver2=cur.fetchall()
         arr=[i[0] for i in ver2]
         print arr
@@ -44,7 +42,8 @@ def update_data(notification=None,tags=None):
         ver = cur.fetchone()
         print ver
         message={
-            'userids':arr
+            'userids':arr,
+            'notif_id':ver3[0]
         }
         send_message(message)
 
@@ -79,5 +78,8 @@ def send_message(message):
     )
     print " [x] Sent %r" % (message,)
     connection.close()
+
+
+
 
 
