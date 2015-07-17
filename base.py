@@ -1,6 +1,6 @@
 __author__ = 'deepak'
 
-class Notification(object):
+class Notification():
 
     def __init__(self, detail, *topics):
         self.detail = detail
